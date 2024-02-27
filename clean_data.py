@@ -9,7 +9,7 @@ def load_data(input_file):
     #
     # Esta parte es igual al taller anterior
     #
-    df = pd.read_csv(input_file)
+    df = pd.read_csv(input_file, sep="\t")
     return df
 
 
@@ -25,23 +25,10 @@ def create_key(df, n):
         str.maketrans("", "", "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~")
     )
     df["key"] = df["key"].str.split()
-
-    # ------------------------------------------------------
-    # Esta es la parte especifica del algoritmo de n-gram:
-    #
-    # - Una el texto sin espacios en blanco
-
-    #
-    # - Convierta el texto a una lista de n-gramas
-
-    #
-    # - Ordene la lista de n-gramas y remueve duplicados
-
-    #
-    # - Convierta la lista de ngramas a una cadena
-
-    ## ------------------------------------------------------
-
+    df["key"] = df["key"].str.join("")
+    df["key"] = df["key"].apply(lambda x: [x[i : i + n] for i in range(len(x) - n + 1)])
+    df["key"] = df["key"].apply(lambda x: sorted(set(x)))
+    df["key"] = df["key"].str.join("")
     return df
 
 
